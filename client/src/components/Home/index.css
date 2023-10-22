@@ -1,0 +1,17 @@
+.custom-tickets-btn{
+    border: 2px solid black;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.custom-cross-btn{
+    border: none;
+    background: none;
+    font-size: 20px;
+}
+.sample-home-container{
+    background-color:yellowgreen;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
