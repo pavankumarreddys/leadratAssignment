@@ -4,12 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <div className="container-fluid custom-home-container">
-      <div className='row'>
-        <div className='col-12'>
+    <div className="custom-home-container">
+      
           <Home/>
-        </div>
-      </div>
     </div>
   );
 }
