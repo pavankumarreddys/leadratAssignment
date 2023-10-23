@@ -1,0 +1,13 @@
+.section-seatingLayout-container{
+    background-color: rgb(232, 249, 243);
+    overflow-y: scroll;
+    height: 75vh;
+}
+.my-custom-seat-class:hover {
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    border-radius: 7px;
+    border :1px solid white;
+  }
+  

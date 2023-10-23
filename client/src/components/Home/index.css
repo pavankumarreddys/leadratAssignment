@@ -1,3 +1,10 @@
+.custom-myhome-container{
+    background: linear-gradient(45deg, #FF5733, #6E45E2);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .custom-tickets-btn{
     border: 2px solid black;
     border-radius: 5px;
@@ -9,7 +16,9 @@
     font-size: 20px;
 }
 .sample-home-container{
-    background-color:yellowgreen;
+    background-image: url("https://img.freepik.com/free-photo/assortment-cinema-elements-red-background-with-copy-space_23-2148457848.jpg?w=1060&t=st=1698073516~exp=1698074116~hmac=af73f32a3392c29bed1cae4b2b2a51b53010c4d79afeec681d29570508e87253");
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 100vh;
     display: flex;
     justify-content: center;

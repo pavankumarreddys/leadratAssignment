@@ -5,18 +5,18 @@ import { SeatComponent } from '../SeatComponent'
 import './index.css'
 
 export const Home = () => {
-    const [showHeaderContainer,setShowHeaderContainer] = useState(true)
+    const [showHeaderContainer,setShowHeaderContainer] = useState(false)
   return (
         <>
             <div>
                 {showHeaderContainer ?(
-                <div className='bg-secondary text-white p-2 d-flex justify-content-between align-items-center'>
+                <div className='custom-myhome-container p-2'>
                     <div>
                         <h4>Movie Name</h4>
                         <p>Pavan Cinemas: Gachibowli | Today,</p>
                     </div>
                     <div>
-                        <button className='custom-tickets-btn'>Tickets <BsFillPencilFill/></button>
+                        <button className='custom-tickets-btn'>Track Tickets <BsFillPencilFill/></button>
                         <button 
                         className='custom-cross-btn' 
                         onClick={()=>{
@@ -40,7 +40,7 @@ export const Home = () => {
                 }
             </div>
             <div className='col-12'>
-                <SeatComponent/>
+                {showHeaderContainer && <SeatComponent/>}
             </div>
         </>
   )
