@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import {BsFillPencilFill} from 'react-icons/bs'
 import {RxCross2} from 'react-icons/rx'
 import { SeatComponent } from '../SeatComponent'
+import TrackSeats from './TrackSeats'
 import './index.css'
 
 export const Home = () => {
@@ -15,8 +15,8 @@ export const Home = () => {
                         <h4>Movie Name</h4>
                         <p>Pavan Cinemas: Gachibowli | Today,</p>
                     </div>
-                    <div>
-                        <button className='custom-tickets-btn'>Track Tickets <BsFillPencilFill/></button>
+                    <div className='d-flex'>
+                        <TrackSeats/>
                         <button 
                         className='custom-cross-btn' 
                         onClick={()=>{
