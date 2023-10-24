@@ -20,12 +20,10 @@ export const SeatingLayout = () => {
 
   const handleSeatBooking = (id) => {
     const updatedData = [...seats];
-    console.log("triggered")
     for (let section of updatedData) {
       for (let seat of section.seats) {
         if (seat.id === id) {
           if(seat.status === "available"){
-            console.log("repeat")
             seat.status = 'Booked';
             setNumberOfSeats(numberOfSeats+1)
           }else{
@@ -38,24 +36,11 @@ export const SeatingLayout = () => {
     setSeats(updatedData);
   };
 
-  const removeSelected = (id) =>{
-    const updatedData = [...seats];
-    for (let section of updatedData) {
-      for (let seat of section.seats) {
-        if (seat.id === id && seat.status === "Booked") {
-          console.log("sam",numberOfSeats)
-          seat.status = 'available';
-          setNumberOfSeats(numberOfSeats-1)
-        }
-      }
-    }
-    console.log("retrive",updatedData)
-
-    // setSeats(updatedData);
-  }
+  
 
   const renderView = ()=>{
     setRenderUpdated(!renderUpdated)
+    setNumberOfSeats(0)
   }
 
   useEffect(() => {
@@ -145,8 +130,8 @@ export const SeatingLayout = () => {
                 className={`seat ${seat.status}`}>
                 <button
                 className={`rounded seat ${seat.status === 'available' ? 'my-custom-seat-class' :seat.status === 'ticketConformed'?'bg-secondary text-white' :'bg-success text-white'}`}
-                onClick={(seat.status === 'ticketConformed' || data.ticketType === seat.seatType) && data.ticketQty > numberOfSeats ? () => handleSeatBooking(seat.id) :()=> removeSelected(seat.id)}
-                disabled={false}
+                onClick={() => handleSeatBooking(seat.id)}
+                disabled={(seat.status === 'ticketConformed' || data.ticketType === seat.seatType) && data.ticketQty > numberOfSeats ? false :true}
                 >{seat.id}</button>
               </div>
             ))}
