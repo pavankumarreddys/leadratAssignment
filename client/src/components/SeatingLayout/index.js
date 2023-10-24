@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { SeatSelection } from '../SeatSelection';
 import { BookTicketButton } from '../BookTicketButton';
+import { UseSelector, useSelector } from 'react-redux';
 import axios from 'axios';
 import './index.css'
 
@@ -7,6 +9,10 @@ export const SeatingLayout = () => {
   const [seats, setSeats] = useState([])
   const [dbData,setDbData] = useState([])
   const [renderUpdated,setRenderUpdated] = useState(false)
+  const [numberOfSeats,setNumberOfSeats] = useState(null)
+  let data = useSelector((state)=>{
+      return state
+  })
 
   const generateSeatId = (row, seatNumber) => {
     return `${String.fromCharCode(65 + row)}${seatNumber}`;
@@ -14,12 +20,14 @@ export const SeatingLayout = () => {
 
   const handleSeatBooking = (id) => {
     const updatedData = [...seats];
-
+    console.log("triggered")
     for (let section of updatedData) {
       for (let seat of section.seats) {
         if (seat.id === id) {
           if(seat.status === "available"){
+            console.log("repeat")
             seat.status = 'Booked';
+            setNumberOfSeats(numberOfSeats+1)
           }else{
             seat.status = 'available'
           }
@@ -29,6 +37,22 @@ export const SeatingLayout = () => {
 
     setSeats(updatedData);
   };
+
+  const removeSelected = (id) =>{
+    const updatedData = [...seats];
+    for (let section of updatedData) {
+      for (let seat of section.seats) {
+        if (seat.id === id && seat.status === "Booked") {
+          console.log("sam",numberOfSeats)
+          seat.status = 'available';
+          setNumberOfSeats(numberOfSeats-1)
+        }
+      }
+    }
+    console.log("retrive",updatedData)
+
+    // setSeats(updatedData);
+  }
 
   const renderView = ()=>{
     setRenderUpdated(!renderUpdated)
@@ -40,19 +64,22 @@ export const SeatingLayout = () => {
     const seatingData = [];
     for (let row = 0; row < alphabet.length; row++) {
       const rowSeats = [];
+      const seatType = alphabet[row] === 'A' ? 'Premium' : 'Standard';
+    
       for (let seatNumber = 1; seatNumber <= rows; seatNumber++) {
         rowSeats.push({
           id: generateSeatId(row, seatNumber),
           status: 'available',
+          seatType: seatType, // Set the seatType
         });
-
       }
+    
       seatingData.push({
         alphabet: alphabet[row],
         seats: rowSeats,
       });
     }
-
+    
     setSeats(seatingData);
 
     async function fetchData() {
@@ -80,9 +107,29 @@ export const SeatingLayout = () => {
   }, [renderUpdated]);
 
 
+
   return (
     <>
     <div className='container section-seatingLayout-container'>
+      <div className='d-flex justify-content-between align-items-center'>
+        <SeatSelection/>
+        <h1>{data.ticketType}</h1>
+        <h1>{data.ticketQty}</h1>
+        <div className='d-flex'>
+        <div className='custom-seats-visability'>
+          <button className='bg-secondary rounded text-white'>seat</button>
+          <p>Sold</p>
+        </div>
+        <div className='custom-seats-visability'>
+          <button className='bg-success rounded text-white'>seat</button>
+          <p>Selected</p>
+        </div>
+        <div className='custom-seats-visability'>
+          <button className='rounded'>seat</button>
+          <p>Available</p>
+        </div>
+        </div>
+      </div>
       {seats.map((alphabet, index) => (
         <div key={index} className='row'>
           <div className='col-12'>
@@ -98,8 +145,8 @@ export const SeatingLayout = () => {
                 className={`seat ${seat.status}`}>
                 <button
                 className={`rounded seat ${seat.status === 'available' ? 'my-custom-seat-class' :seat.status === 'ticketConformed'?'bg-secondary text-white' :'bg-success text-white'}`}
-                onClick={()=>handleSeatBooking(seat.id)}
-                disabled={seat.status === 'ticketConformed'?true:false}
+                onClick={(seat.status === 'ticketConformed' || data.ticketType === seat.seatType) && data.ticketQty > numberOfSeats ? () => handleSeatBooking(seat.id) :()=> removeSelected(seat.id)}
+                disabled={false}
                 >{seat.id}</button>
               </div>
             ))}

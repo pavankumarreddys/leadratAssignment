@@ -1,3 +1,12 @@
+.custom-seats-visability{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    margin-top: 5px;
+    
+}
 .section-seatingLayout-container{
     background-color: rgb(232, 249, 243);
     overflow-y: scroll;
