@@ -36,11 +36,13 @@ export const SeatingLayout = () => {
     setSeats(updatedData);
   };
 
-  
+  const unSelectFun = ()=>{
+    
+  }
 
   const renderView = ()=>{
     setRenderUpdated(!renderUpdated)
-    setNumberOfSeats(0)
+    
   }
 
   useEffect(() => {
@@ -130,7 +132,7 @@ export const SeatingLayout = () => {
                 className={`seat ${seat.status}`}>
                 <button
                 className={`rounded seat ${seat.status === 'available' ? 'my-custom-seat-class' :seat.status === 'ticketConformed'?'bg-secondary text-white' :'bg-success text-white'}`}
-                onClick={(seat.status !== 'ticketConformed') ? () => handleSeatBooking(seat.id):null}
+                onClick={(seat.status !== 'ticketConformed') ? () => handleSeatBooking(seat.id):unSelectFun(seat.id)}
                 disabled={(seat.status === 'ticketConformed' || data.ticketType === seat.seatType) && data.ticketQty > numberOfSeats ? false :true}
                 >{seat.id}</button>
               </div>
