@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { SeatSelection } from '../SeatSelection';
 import { BookTicketButton } from '../BookTicketButton';
-import { UseSelector, useSelector } from 'react-redux';
+import { UseSelector, useSelector,useDispatch } from 'react-redux';
+
+
 import axios from 'axios';
 import './index.css'
 
@@ -9,7 +11,8 @@ export const SeatingLayout = () => {
   const [seats, setSeats] = useState([])
   const [dbData,setDbData] = useState([])
   const [renderUpdated,setRenderUpdated] = useState(false)
-  const [numberOfSeats,setNumberOfSeats] = useState(null)
+  const [numberOfSeats,setNumberOfSeats] = useState(0)
+  const dispatch = useDispatch()
   let data = useSelector((state)=>{
       return state
   })
@@ -23,11 +26,12 @@ export const SeatingLayout = () => {
     for (let section of updatedData) {
       for (let seat of section.seats) {
         if (seat.id === id) {
-          if(seat.status === "available"){
+          if(seat.status === "available" && numberOfSeats < data.ticketQty){
             seat.status = 'Booked';
             setNumberOfSeats(numberOfSeats+1)
-          }else{
+          }else if(seat.status === 'Booked'){
             seat.status = 'available'
+            setNumberOfSeats(numberOfSeats-1)
           }
         }
       }
@@ -36,13 +40,29 @@ export const SeatingLayout = () => {
     setSeats(updatedData);
   };
 
-  const unSelectFun = ()=>{
+  const unSelectFun = (id)=>{
+    console.log("first1",id)
+  }
+
+  const ticketTypeTiggred = ()=>{
+    console.log("i am  active")
+    const updatedData = [...seats];
+    for (let section of updatedData) {
+      for (let seat of section.seats) {
+          if(seat.status !== "ticketConformed" ){
+            seat.status = 'available'
+          }
+      }
+    }
+
+    setSeats(updatedData);
+    setNumberOfSeats(0)
+    dispatch({type:"ticketQty",payload:0})
     
   }
 
   const renderView = ()=>{
     setRenderUpdated(!renderUpdated)
-    
   }
 
   useEffect(() => {
@@ -73,7 +93,6 @@ export const SeatingLayout = () => {
       try {
         const response = await axios.get("http://localhost:5000/gettickets");
         const dbData = response?.data
-        console.log("db",dbData.length)
         for (let data of dbData){
           for (let section of seatingData) {
             for (let seat of section.seats) {
@@ -91,17 +110,15 @@ export const SeatingLayout = () => {
     }
 
     fetchData();
-  }, [renderUpdated]);
+  },[renderUpdated]);
 
 
-
+console.log("numberOfSeats",numberOfSeats)
   return (
     <>
     <div className='container section-seatingLayout-container'>
       <div className='d-flex justify-content-between align-items-center'>
-        <SeatSelection/>
-        <h1>{data.ticketType}</h1>
-        <h1>{data.ticketQty}</h1>
+        <SeatSelection ticketTypeTiggred={ticketTypeTiggred}/>
         <div className='d-flex'>
         <div className='custom-seats-visability'>
           <button className='bg-secondary rounded text-white'>seat</button>
@@ -132,8 +149,8 @@ export const SeatingLayout = () => {
                 className={`seat ${seat.status}`}>
                 <button
                 className={`rounded seat ${seat.status === 'available' ? 'my-custom-seat-class' :seat.status === 'ticketConformed'?'bg-secondary text-white' :'bg-success text-white'}`}
-                onClick={(seat.status !== 'ticketConformed') ? () => handleSeatBooking(seat.id):unSelectFun(seat.id)}
-                disabled={(seat.status === 'ticketConformed' || data.ticketType === seat.seatType) && data.ticketQty > numberOfSeats ? false :true}
+                onClick={(seat.status !== 'ticketConformed') ? () => handleSeatBooking(seat.id):() => unSelectFun(seat.id)}
+                disabled={(seat.status === 'ticketConformed' || data.ticketType === seat.seatType) ? false :true}
                 >{seat.id}</button>
               </div>
             ))}

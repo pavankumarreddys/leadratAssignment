@@ -28,6 +28,7 @@ export default function TrackSeats() {
   };
 
   React.useEffect(()=>{
+    console.log("tc")
     async function getdbData(){
         const response = await axios.get("http://localhost:5000/gettickets");
         const dbData = response?.data

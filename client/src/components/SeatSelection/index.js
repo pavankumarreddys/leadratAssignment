@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import './index.css'
-export const SeatSelection = () => {
+export const SeatSelection = (props) => {
+    const {ticketTypeTiggred} = props
     const [ticketType,setTicketType] = useState('')
     const [ticketQty,setTicketQty] = useState('')
     const dispatch = useDispatch()
+    console.log("trigger")
   return (
     <div>
         <select value={ticketType} className='custom-select-option' 
         onChange={(e)=>{
             setTicketType(e.target.value)
+            ticketTypeTiggred()
             dispatch({type:"ticketType",payload:e.target.value})
         }}>
             <option value='' disabled >Ticket type</option>
@@ -19,6 +22,7 @@ export const SeatSelection = () => {
         <select value={ticketQty} className='custom-select-option'
         onChange={(e)=>{
             setTicketQty(e.target.value)
+            ticketTypeTiggred()
             dispatch({type:"ticketQty",payload:e.target.value})
         }}
         >
